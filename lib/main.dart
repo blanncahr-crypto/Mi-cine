@@ -11,15 +11,14 @@ class MiCineApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'MiCine LDSW',
-      theme: ThemeData(
-        primarySwatch: Colors.teal,
-        scaffoldBackgroundColor: Colors.white,
-      ),
+      title: 'MiCine',
+      theme: ThemeData.dark(),
       home: const PantallaBienvenida(),
     );
   }
 }
+
+// ================== BIENVENIDA ==================
 
 class PantallaBienvenida extends StatelessWidget {
   const PantallaBienvenida({super.key});
@@ -27,86 +26,221 @@ class PantallaBienvenida extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 40),
-          child: Column( // *** WIDGET 1: COLUMN (Eje Vertical) ***
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              
-              // SECCIÓN DEL LOGO
-              Row( // *** WIDGET 2: ROW (Eje Horizontal) ***
+      body: Stack(
+        children: [
+
+      
+
+          // 🔹 OSCURECER
+          Container(
+            color: Colors.white12.withOpacity(0.6),
+          ),
+
+          // 🔹 CONTENIDO
+          Center(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 40),
+              child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  const Icon(
-                    Icons.play_circle_fill, 
-                    size: 80, 
-                    color: Color(0xFF00BFA5)
+
+                  const Text(
+                    'Bienvenido a',
+                    style: TextStyle(fontSize: 22),
                   ),
-                  const SizedBox(width: 15),
-                  const Text( // *** WIDGET 3: TEXT ***
-                    'MiCine',
-                    style: TextStyle(
-                      fontSize: 40,
-                      fontWeight: FontWeight.bold,
-                      color: Color(0xFF00BFA5),
+
+                  const SizedBox(height: 10),
+
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: const [
+                      Icon(Icons.play_circle_fill,
+                          size: 80, color: Colors.teal),
+                      SizedBox(width: 10),
+                      Text(
+                        'MiCine',
+                        style: TextStyle(
+                          fontSize: 40,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.teal,
+                        ),
+                      ),
+                    ],
+                  ),
+
+                  const SizedBox(height: 80),
+
+                  ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      minimumSize: const Size(double.infinity, 50),
                     ),
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const HomeScreen(),
+                        ),
+                      );
+                    },
+                    child: const Text('Iniciar sesión'),
+                  ),
+
+                  const SizedBox(height: 20),
+
+                  OutlinedButton(
+                    style: OutlinedButton.styleFrom(
+                      minimumSize: const Size(double.infinity, 50),
+                    ),
+                    onPressed: () {},
+                    child: const Text('Registrarse'),
                   ),
                 ],
               ),
-              
-              const SizedBox(height: 100), // Espacio entre logo y botones
-
-              // BOTÓN: INICIAR SESIÓN
-              Container( // *** WIDGET 4: CONTAINER (Para bordes y forma) ***
-                width: double.infinity,
-                padding: const EdgeInsets.symmetric(vertical: 15),
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(30),
-                  border: Border.all(color: const Color(0xFF00BFA5), width: 2),
-                ),
-                child: const Center(
-                  child: Text(
-                    'Iniciar sesión',
-                    style: TextStyle(
-                      color: Color(0xFF00BFA5),
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ),
-              ),
-
-              const SizedBox(height: 20), // Espacio entre botones
-
-              // BOTÓN: REGISTRARSE
-              Container( 
-                width: double.infinity,
-                padding: const EdgeInsets.symmetric(vertical: 15),
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(30),
-                  border: Border.all(color: const Color(0xFF00BFA5), width: 2),
-                ),
-                child: const Center(
-                  child: Text(
-                    'Registrarse',
-                    style: TextStyle(
-                      color: Color(0xFF00BFA5),
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ),
-              ),
-
-              const SizedBox(height: 80),
-
-            ],
+            ),
           ),
-        ),
+        ],
       ),
     );
+  }
+}
+
+// ================== HOME ==================
+
+class HomeScreen extends StatefulWidget {
+  const HomeScreen({super.key});
+
+  @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
+  int _index = 0;
+
+  final List<Widget> screens = const [
+    InicioScreen(),
+    ExplorarScreen(),
+    ListaScreen(),
+    PerfilScreen(),
+  ];
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: screens[_index],
+      bottomNavigationBar: BottomNavigationBar(
+        currentIndex: _index,
+        selectedItemColor: Colors.teal,
+        unselectedItemColor: Colors.grey,
+        backgroundColor: Colors.black,
+        onTap: (i) {
+          setState(() {
+            _index = i;
+          });
+        },
+        items: const [
+          BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Inicio'),
+          BottomNavigationBarItem(icon: Icon(Icons.search), label: 'Explorar'),
+          BottomNavigationBarItem(icon: Icon(Icons.bookmark), label: 'Mi lista'),
+          BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Perfil'),
+        ],
+      ),
+    );
+  }
+}
+
+// ================== INICIO ==================
+
+class InicioScreen extends StatelessWidget {
+  const InicioScreen({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: Colors.black,
+      appBar: AppBar(
+        title: const Text('MiCine'),
+        backgroundColor: Colors.black,
+      ),
+      body: ListView(
+        children: [
+          seccion('Tendencias'),
+          seccion('Novedades'),
+        ],
+      ),
+    );
+  }
+
+  Widget seccion(String titulo) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+
+        Padding(
+          padding: const EdgeInsets.all(10),
+          child: Text(
+            titulo,
+            style: const TextStyle(
+              fontSize: 20,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ),
+
+        SizedBox(
+          height: 180,
+          child: ListView(
+            scrollDirection: Axis.horizontal,
+            children: List.generate(10, (index) {
+              return Container(
+                width: 120,
+                margin: const EdgeInsets.all(8),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10),
+                  image: const DecorationImage(
+                    image: NetworkImage(
+                      'https://picsum.photos/200/300', // imágenes de prueba
+                    ),
+                    fit: BoxFit.cover,
+                  ),
+                ),
+              );
+            }),
+          ),
+        )
+      ],
+    );
+  }
+}
+
+// ================== EXPLORAR ==================
+
+class ExplorarScreen extends StatelessWidget {
+  const ExplorarScreen({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return const Center(child: Text('Explorar'));
+  }
+}
+
+// ================== LISTA ==================
+
+class ListaScreen extends StatelessWidget {
+  const ListaScreen({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return const Center(child: Text('Mi lista'));
+  }
+}
+
+// ================== PERFIL ==================
+
+class PerfilScreen extends StatelessWidget {
+  const PerfilScreen({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return const Center(child: Text('Perfil'));
   }
 }
