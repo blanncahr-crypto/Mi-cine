@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'dart:convert';
+import 'package:http/http.dart' as http;
 
 void main() {
   runApp(const MiCineApp());
@@ -28,29 +30,20 @@ class PantallaBienvenida extends StatelessWidget {
     return Scaffold(
       body: Stack(
         children: [
-
-      
-
-          // 🔹 OSCURECER
           Container(
             color: Colors.white12.withOpacity(0.6),
           ),
-
-          // 🔹 CONTENIDO
           Center(
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 40),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-
                   const Text(
                     'Bienvenido a',
                     style: TextStyle(fontSize: 22),
                   ),
-
                   const SizedBox(height: 10),
-
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: const [
@@ -67,9 +60,7 @@ class PantallaBienvenida extends StatelessWidget {
                       ),
                     ],
                   ),
-
                   const SizedBox(height: 80),
-
                   ElevatedButton(
                     style: ElevatedButton.styleFrom(
                       minimumSize: const Size(double.infinity, 50),
@@ -84,9 +75,7 @@ class PantallaBienvenida extends StatelessWidget {
                     },
                     child: const Text('Iniciar sesión'),
                   ),
-
                   const SizedBox(height: 20),
-
                   OutlinedButton(
                     style: OutlinedButton.styleFrom(
                       minimumSize: const Size(double.infinity, 50),
@@ -148,10 +137,37 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 }
 
-// ================== INICIO ==================
+// ================== INICIO (CON HTTP) ==================
 
-class InicioScreen extends StatelessWidget {
+class InicioScreen extends StatefulWidget {
   const InicioScreen({super.key});
+
+  @override
+  State<InicioScreen> createState() => _InicioScreenState();
+}
+
+class _InicioScreenState extends State<InicioScreen> {
+  List pokemon = [];
+
+  @override
+  void initState() {
+    super.initState();
+    obtenerDatos();
+  }
+
+  Future<void> obtenerDatos() async {
+    final url = Uri.parse('https://pokeapi.co/api/v2/pokemon?limit=5');
+
+    final response = await http.get(url);
+
+    if (response.statusCode == 200) {
+      final data = json.decode(response.body);
+
+      setState(() {
+        pokemon = data['results'];
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -165,6 +181,24 @@ class InicioScreen extends StatelessWidget {
         children: [
           seccion('Tendencias'),
           seccion('Novedades'),
+
+          // 🔥 NUEVA SECCIÓN (HTTP)
+          const Padding(
+            padding: EdgeInsets.all(10),
+            child: Text(
+              'Pokémon (HTTP)',
+              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+            ),
+          ),
+
+          ...pokemon.map((p) {
+            return ListTile(
+              leading: Image.network(
+                'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${pokemon.indexOf(p) + 1}.png',
+              ),
+              title: Text(p['name']),
+            );
+          }).toList(),
         ],
       ),
     );
@@ -174,7 +208,6 @@ class InicioScreen extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-
         Padding(
           padding: const EdgeInsets.all(10),
           child: Text(
@@ -185,7 +218,6 @@ class InicioScreen extends StatelessWidget {
             ),
           ),
         ),
-
         SizedBox(
           height: 180,
           child: ListView(
@@ -198,7 +230,7 @@ class InicioScreen extends StatelessWidget {
                   borderRadius: BorderRadius.circular(10),
                   image: const DecorationImage(
                     image: NetworkImage(
-                      'https://picsum.photos/200/300', // imágenes de prueba
+                      'https://picsum.photos/200/300',
                     ),
                     fit: BoxFit.cover,
                   ),
