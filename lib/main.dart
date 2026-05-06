@@ -182,7 +182,7 @@ class _InicioScreenState extends State<InicioScreen> {
           seccion('Tendencias'),
           seccion('Novedades'),
 
-          // 🔥 NUEVA SECCIÓN (HTTP)
+          // NUEVA SECCIÓN (HTTP)
           const Padding(
             padding: EdgeInsets.all(10),
             child: Text(
