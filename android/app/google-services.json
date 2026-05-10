@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "304013715770",
+    "project_id": "micine-1a1f0",
+    "storage_bucket": "micine-1a1f0.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:304013715770:android:f91e3d272a6d2525df8803",
+        "android_client_info": {
+          "package_name": "com.example.myapp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDjgpHswEAnjY3galnLuMaiAO6jVvIdeuA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
